@@ -1,15 +1,17 @@
 Summary:	jQuery plugin: Autocomplete
 Name:		jquery-autocomplete
 Version:	1.1
-Release:	0.11
+Release:	1
 License:	MIT / GPL v2
 Group:		Applications/WWW
 Source0:	http://jquery.bassistance.de/autocomplete/jquery.autocomplete.zip
 # Source0-md5:	7de19c33f0c08f20cc5e496eb10787f0
 URL:		http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/
+BuildRequires:	js
 BuildRequires:	rpmbuild(macros) >= 1.565
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
+BuildRequires:	yuicompressor
 Requires:	jquery >= 1.2.6
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -45,6 +47,11 @@ Demonstrations and samples for jQuery.autocomplete.
 %setup -qn %{name}
 %undos changelog.txt todo
 
+# avoid filename conflict
+sed -i -e '
+	s,indicator.gif,jquery.autocomplete-indicator.gif,
+' jquery.autocomplete.css
+
 cd demo
 %undos -f html,js,css
 
@@ -62,14 +69,23 @@ ln -s %{_appdir}/jquery.js .
 
 ln -s %{_appdir}/jquery.autocomplete.js .
 ln -s %{_appdir}/jquery.autocomplete.css .
+ln -s %{_appdir}/jquery.autocomplete-indicator.gif .
 
 ln -s %{_datadir}/jquery-thickbox/thickbox.css .
 ln -s %{_datadir}/jquery-thickbox/thickbox.js .
 
 %build
 install -d build
-cp -a jquery.autocomplete.css build
-cp -a jquery.autocomplete.min.js build/jquery.autocomplete.js
+
+# compress .js
+yuicompressor --charset UTF-8 jquery.autocomplete.min.js -o build/jquery.autocomplete.js
+js -C -f build/jquery.autocomplete.js
+
+# compress with yui to get rid of comments, etc
+yuicompressor --charset UTF-8 jquery.autocomplete.css -o build/jquery.autocomplete.css
+
+# used by css
+cp -a demo/indicator.gif build/jquery.autocomplete-indicator.gif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -83,7 +99,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc changelog.txt todo
-%{_appdir}/jquery.autocomplete.*
+%{_appdir}/jquery.autocomplete*
 
 %files demo
 %defattr(644,root,root,755)
