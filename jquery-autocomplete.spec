@@ -1,7 +1,8 @@
+%define		plugin	autocomplete
 Summary:	jQuery plugin: Autocomplete
-Name:		jquery-autocomplete
+Name:		jquery-%{plugin}
 Version:	1.1
-Release:	1
+Release:	2
 License:	MIT / GPL v2
 Group:		Applications/WWW
 Source0:	http://jquery.bassistance.de/autocomplete/jquery.autocomplete.zip
@@ -16,10 +17,7 @@ Requires:	jquery >= 1.2.6
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_webapps	/etc/webapps
-%define		_webapp		%{name}
-%define		_sysconfdir	%{_webapps}/%{_webapp}
-%define		_appdir		%{_datadir}/jquery
+%define		_appdir	%{_datadir}/jquery/%{plugin}
 
 %description
 Autocomplete an input field to enable users quickly finding and
@@ -37,7 +35,7 @@ maybe enter email addresses from an addressbook.
 %package demo
 Summary:	Demo for jQuery.autocomplete
 Group:		Development
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	jquery-thickbox
 
 %description demo
@@ -56,36 +54,29 @@ cd demo
 %undos -f html,js,css
 
 sed -i -e '
-	s,../lib/jquery.js,jquery.js,
+	s,../lib/jquery.js,jquery/jquery.js,
 
-	s,../jquery.autocomplete.js,jquery.autocomplete.js,
-	s,../jquery.autocomplete.css,jquery.autocomplete.css,
+	s,../jquery.autocomplete.js,jquery/autocomplete/autocomplete.js,
+	s,../jquery.autocomplete.css,jquery/autocomplete/autocomplete.css,
 
-	s,../lib/thickbox.css,thickbox.css,
-	s,../lib/thickbox-compressed.js,thickbox.js,
+	s,../lib/thickbox.css,jquery/thickbox/thickbox.css,
+	s,../lib/thickbox-compressed.js,jquery/thickbox/thickbox.js,
 ' index.html json.html
 
-ln -s %{_appdir}/jquery.js .
-
-ln -s %{_appdir}/jquery.autocomplete.js .
-ln -s %{_appdir}/jquery.autocomplete.css .
-ln -s %{_appdir}/jquery.autocomplete-indicator.gif .
-
-ln -s %{_datadir}/jquery-thickbox/thickbox.css .
-ln -s %{_datadir}/jquery-thickbox/thickbox.js .
+ln -s %{_datadir}/jquery .
 
 %build
 install -d build
 
 # compress .js
-yuicompressor --charset UTF-8 jquery.autocomplete.min.js -o build/jquery.autocomplete.js
-js -C -f build/jquery.autocomplete.js
+yuicompressor --charset UTF-8 jquery.autocomplete.min.js -o build/autocomplete.js
+js -C -f build/autocomplete.js
 
 # compress with yui to get rid of comments, etc
-yuicompressor --charset UTF-8 jquery.autocomplete.css -o build/jquery.autocomplete.css
+yuicompressor --charset UTF-8 jquery.autocomplete.css -o build/autocomplete.css
 
 # used by css
-cp -a demo/indicator.gif build/jquery.autocomplete-indicator.gif
+cp -a demo/indicator.gif build
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -99,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc changelog.txt todo
-%{_appdir}/jquery.autocomplete*
+%{_appdir}
 
 %files demo
 %defattr(644,root,root,755)
