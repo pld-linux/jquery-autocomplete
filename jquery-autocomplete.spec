@@ -2,14 +2,14 @@
 Summary:	jQuery plugin: Autocomplete
 Name:		jquery-%{plugin}
 Version:	1.1
-Release:	2
+Release:	3
 License:	MIT / GPL v2
 Group:		Applications/WWW
 Source0:	http://jquery.bassistance.de/autocomplete/jquery.autocomplete.zip
 # Source0-md5:	7de19c33f0c08f20cc5e496eb10787f0
 URL:		http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/
 BuildRequires:	js
-BuildRequires:	rpmbuild(macros) >= 1.565
+BuildRequires:	rpmbuild(macros) >= 1.566
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
 BuildRequires:	yuicompressor
