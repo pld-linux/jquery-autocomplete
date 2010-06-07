@@ -2,7 +2,7 @@
 Summary:	jQuery plugin: Autocomplete
 Name:		jquery-%{plugin}
 Version:	1.1
-Release:	3
+Release:	4
 License:	MIT / GPL v2
 Group:		Applications/WWW
 Source0:	http://jquery.bassistance.de/autocomplete/jquery.autocomplete.zip
@@ -44,11 +44,6 @@ Demonstrations and samples for jQuery.autocomplete.
 %prep
 %setup -qn %{name}
 %undos changelog.txt todo
-
-# avoid filename conflict
-sed -i -e '
-	s,indicator.gif,jquery.autocomplete-indicator.gif,
-' jquery.autocomplete.css
 
 cd demo
 %undos -f html,js,css
