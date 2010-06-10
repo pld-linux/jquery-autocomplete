@@ -63,12 +63,20 @@ ln -s %{_datadir}/jquery .
 %build
 install -d build
 
+%if 0%{!?debug:1}
 # compress .js
 yuicompressor --charset UTF-8 jquery.autocomplete.min.js -o build/autocomplete.js
 js -C -f build/autocomplete.js
+%else
+cp -a jquery.autocomplete.min.js build/autocomplete.js
+%endif
 
+%if 0%{!?debug:1}
 # compress with yui to get rid of comments, etc
 yuicompressor --charset UTF-8 jquery.autocomplete.css -o build/autocomplete.css
+%else
+cp -a jquery.autocomplete.css build/autocomplete.css
+%endif
 
 # used by css
 cp -a demo/indicator.gif build
