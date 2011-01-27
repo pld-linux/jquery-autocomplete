@@ -12,6 +12,7 @@ BuildRequires:	js
 BuildRequires:	rpmbuild(macros) >= 1.566
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
+BuildRequires:	js
 BuildRequires:	yuicompressor
 Requires:	jquery >= 1.2.6
 BuildArch:	noarch
